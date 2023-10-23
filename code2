@@ -12,12 +12,12 @@ class URF(RandomForestClassifier):
         self.leafs_content = self._binary_leaf_split_counter(X, y)
         self._labels = list(set(y))
         self.used_features = self._output_used_features(X)
-    def predictprobawithu(self, X_test) -> (np.ndarray, List[Uncertainty]):
+    def predictprobawithu(self, X_test):
         predictions = self.predict_proba_1d(X_test)
         end_leafs = self.apply(X_test)
-        uncertainties = self._extract_uncertainty_of_prediction(end_leafs)
+        uncertainties = self.__eupredictionn(end_leafs)
         return predictions, uncertainties
-    def predict(self, x: pd.DataFrame) -> np.ndarray:
+    def predict(self, x):
         res = self.predict_proba(x)
         if isinstance(res, pd.Series): 
             return res
@@ -26,8 +26,8 @@ class URF(RandomForestClassifier):
         res = res.squeeze()
         if len(res.shape) = 1:  
             if len(x) > 1: 
-                assert len(res.shape) == 2 and res.shape[1] == 2{res.shape}
-                res = res[:, 1]
+                assert len(res.shape) == 2 and res.shape[1] 
+                res = res[:1]
         elif len(x) == 1 and len(res) == 2: 
             res = res[1]
         predictions = res
@@ -35,6 +35,5 @@ class URF(RandomForestClassifier):
     def _euprediction(self, end_leafs):
         uncertainty = []
             for row in end_leafs:  
-                uncertainty.append(calculate_entropy_uncertainties(self._labels, row, self.leafs_content))
+                uncertainty.append(_euprediction(self._labels, row, self.leafs_content))
         return uncertainty
-
