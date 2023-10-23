@@ -1,1 +1,23 @@
-http://localhost:8888/notebooks/Untitled.ipynb?kernel_name=python3
+import numpy as np
+import pandas as pd
+def calculate_entropy_uncertainties(labels: list, end_leafs: np.ndarray, leafs_split: List[Dict[int, List[int]]]) 
+    n_labels = len(labels)
+    tot_u = 0  
+    al_u = 0  
+    for label in labels:  
+        tot_p = 0 
+        tot_p_log_p = 0  
+        for tree_leafs_split, end_leaf in zip(leafs_split, end_leafs):  
+            p = _calculate_class_conditional_probabilities(label, n_labels, end_leaf, tree_leafs_split)
+            tot_p = p
+            tot_p_log_p = p * np.log2(p)
+        mean_tot_p = tot_p / len(end_leafs)  
+        log_mean_tot_p = np.log2(mean_tot_p)
+        tot_u = mean_tot_p * log_mean_tot_p
+        mean_tot_p_log_p = tot_p_log_p / len(end_leafs)  
+        al_u = mean_tot_p_log_p
+    return Uncertainty(tot_u, al_u, tot_u - al_u)
+def _calculate_class_conditional_probabilities(label, n_labels, end_leaf, tree_leafs_split) 
+    n_y = tree_leafs_split[end_leaf][label]
+    n = sum(tree_leafs_split[end_leaf])
+    return (n_y + 1) / (n * n_labels)
